@@ -1,9 +1,10 @@
 'use client'
+
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { ViewMode } from '../types';
+import { ViewMode } from '@/types';
 
-interface CategoryHighlightsProps {
+export interface CategoryHighlightsProps {
   onNavigate: (view: ViewMode, category?: string) => void;
 }
 
@@ -40,7 +41,7 @@ export const CategoryHighlights: React.FC<CategoryHighlightsProps> = ({ onNaviga
   ];
 
   return (
-    <section className="py-8 sm:py-14">
+    <section id="category-highlights-section" className="py-8 sm:py-14" aria-label="Curated discipline collections">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="mb-6 flex items-end justify-between">
@@ -58,6 +59,7 @@ export const CategoryHighlights: React.FC<CategoryHighlightsProps> = ({ onNaviga
           {spotlights.map((item, idx) => (
             <div
               key={idx}
+              id={`highlight-discipline-${item.category.toLowerCase().replace(/\s+/g, '-')}`}
               onClick={() => onNavigate('catalog', item.category)}
               className={`group relative h-64 sm:h-72 rounded-3xl overflow-hidden cursor-pointer shadow-sm border border-neutral-200/80 ${item.cols}`}
             >

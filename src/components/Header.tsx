@@ -1,7 +1,8 @@
 'use client'
 import React, { useState } from 'react';
-import { Search, ShoppingBag, Heart, Menu, X, Globe, Sparkles } from 'lucide-react';
+import { Search, ShoppingBag, Heart, Menu, Globe, Sparkles } from 'lucide-react';
 import { ViewMode } from '../types';
+import { MobileDrawer } from './MobileDrawer';
 
 interface HeaderProps {
   currentView: ViewMode;
@@ -28,15 +29,6 @@ export const Header: React.FC<HeaderProps> = ({
 
   const currencies = ['USD', 'EUR', 'GBP'];
 
-  const navLinks = [
-    { label: 'Home', view: 'home' as ViewMode },
-    { label: 'Catalog', view: 'catalog' as ViewMode },
-    { label: 'Apparel', view: 'catalog' as ViewMode, category: 'Apparel' },
-    { label: 'Everyday Carry', view: 'catalog' as ViewMode, category: 'Everyday Carry' },
-    { label: 'Tech & Audio', view: 'catalog' as ViewMode, category: 'Tech & Audio' },
-    { label: 'Objects', view: 'catalog' as ViewMode, category: 'Objects & Home' },
-  ];
-
   return (
     <header className="sticky top-0 z-40 w-full bg-[#F8F7F5]/90 backdrop-blur-md border-b border-[#E8E6E1] transition-all">
       {/* Top micro-announcement */}
@@ -52,11 +44,11 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-3">
             <button
               id="mobile-menu-trigger"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => setMobileMenuOpen(true)}
               className="p-2 -ml-2 text-neutral-800 hover:text-black md:hidden rounded-lg hover:bg-neutral-200/50 transition-colors"
-              aria-label="Toggle Navigation Menu"
+              aria-label="Open Navigation Drawer"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Menu className="w-5 h-5" />
             </button>
 
             {/* Desktop navigation */}
@@ -192,44 +184,19 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#E8E6E1] bg-[#F8F7F5] px-6 py-4 space-y-3 animate-fadeIn">
-          <div className="space-y-1">
-            {navLinks.map((item, idx) => (
-              <button
-                key={idx}
-                id={`mobile-nav-${idx}`}
-                onClick={() => {
-                  onNavigate(item.view, item.category);
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left py-2.5 px-3 text-base font-medium text-neutral-800 hover:bg-neutral-200/60 rounded-lg transition-colors flex items-center justify-between"
-              >
-                <span>{item.label}</span>
-                <span className="text-neutral-400 text-xs font-mono">→</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="pt-3 border-t border-neutral-200/80 flex items-center justify-between text-xs text-neutral-500 font-mono">
-            <span>Currency:</span>
-            <div className="flex gap-2">
-              {currencies.map((curr) => (
-                <button
-                  key={curr}
-                  onClick={() => onCurrencyChange(curr)}
-                  className={`px-2 py-1 rounded ${
-                    selectedCurrency === curr ? 'bg-black text-white' : 'bg-neutral-200 text-neutral-800'
-                  }`}
-                >
-                  {curr}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Responsive Mobile Drawer Navigation */}
+      <MobileDrawer
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        currentView={currentView}
+        onNavigate={onNavigate}
+        cartCount={cartCount}
+        wishlistCount={wishlistCount}
+        onOpenCart={onOpenCart}
+        onOpenSearch={onOpenSearch}
+        selectedCurrency={selectedCurrency}
+        onCurrencyChange={onCurrencyChange}
+      />
     </header>
   );
 };

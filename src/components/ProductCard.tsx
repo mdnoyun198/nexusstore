@@ -16,7 +16,6 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   currency,
-  currencyRate = 1,
   isWishlisted,
   onToggleWishlist,
   onQuickAdd,

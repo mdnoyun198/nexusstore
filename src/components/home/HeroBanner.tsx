@@ -1,7 +1,8 @@
 'use client'
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { ViewMode } from '../types';
+import { ViewMode } from '@/types';
 
 interface HeroSlide {
   id: string;
@@ -47,11 +48,11 @@ const HERO_SLIDES: HeroSlide[] = [
   }
 ];
 
-interface HeroCarouselProps {
+export interface HeroBannerProps {
   onNavigate: (view: ViewMode, category?: string) => void;
 }
 
-export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
+export const HeroBanner: React.FC<HeroBannerProps> = ({ onNavigate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef(0);
@@ -96,6 +97,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
 
   return (
     <div
+      id="hero-banner"
       className="relative w-full overflow-hidden bg-neutral-900 text-white"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -142,15 +144,16 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
               <button
                 id={`hero-cta-${currentSlide}`}
                 onClick={() => onNavigate('catalog', slide.categoryTarget)}
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-100 active:scale-[0.98] transition-all shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-black text-sm font-semibold hover:bg-neutral-100 active:scale-[0.98] transition-all shadow-lg cursor-pointer"
               >
                 <span>{slide.ctaText}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </button>
 
               <button
+                id="hero-view-lookbook-btn"
                 onClick={() => onNavigate('catalog')}
-                className="px-5 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium backdrop-blur-md transition-all"
+                className="px-5 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium backdrop-blur-md transition-all cursor-pointer"
               >
                 View Lookbook
               </button>
@@ -165,7 +168,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
                 <button
                   key={idx}
                   onClick={() => setCurrentSlide(idx)}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                     idx === currentSlide ? 'w-8 bg-white' : 'w-2 bg-white/40 hover:bg-white/70'
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
@@ -178,7 +181,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
               <button
                 id="hero-prev-btn"
                 onClick={handlePrev}
-                className="w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md flex items-center justify-center text-white transition-colors"
+                className="w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md flex items-center justify-center text-white transition-colors cursor-pointer"
                 aria-label="Previous slide"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -186,7 +189,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
               <button
                 id="hero-next-btn"
                 onClick={handleNext}
-                className="w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md flex items-center justify-center text-white transition-colors"
+                className="w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md flex items-center justify-center text-white transition-colors cursor-pointer"
                 aria-label="Next slide"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -198,3 +201,6 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+// Also export as HeroCarousel for alias support
+export const HeroCarousel = HeroBanner;

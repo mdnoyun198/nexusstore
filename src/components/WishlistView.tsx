@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { Heart, ArrowLeft, Trash2, Plus } from 'lucide-react';
+import { Heart, ArrowLeft } from 'lucide-react';
 import { Product, ProductColor } from '../types';
 import { ProductCard } from './ProductCard';
 

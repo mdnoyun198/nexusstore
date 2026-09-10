@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { X, CheckCircle2, ShieldCheck, Lock, CreditCard, Sparkles, ArrowLeft, Truck } from 'lucide-react';
+import { X, CheckCircle2, ShieldCheck, Lock, Sparkles, Truck } from 'lucide-react';
 import { CartItem } from '../types';
 
 interface CheckoutModalProps {
@@ -22,8 +22,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   promoCodeName,
   onOrderComplete
 }) => {
-  if (!isOpen) return null;
-
   const [step, setStep] = useState<'form' | 'success'>('form');
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard');
   const [orderNumber, setOrderNumber] = useState('');
@@ -36,6 +34,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [city, setCity] = useState('San Francisco');
   const [postalCode, setPostalCode] = useState('94107');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  if (!isOpen) return null;
 
   const subtotal = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
   const discountAmount = (subtotal * promoDiscountPercent) / 100;

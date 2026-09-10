@@ -4,10 +4,15 @@ import { Product, CartItem, ProductColor, ViewMode } from '@/types';
 import { PRODUCTS } from '@/data/products';
 import { Header } from '@/components/Header';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { HeroCarousel } from '@/components/HeroCarousel';
-import { ProductCarousel } from '@/components/ProductCarousel';
-import { CategoryHighlights } from '@/components/CategoryHighlights';
-import { BrandPerks } from '@/components/BrandPerks';
+import {
+  HeroBanner,
+  CategoryList,
+  CategoryHighlights,
+  TrendingSection,
+  AudioAndCarrySection,
+  BestSellersSection,
+  FeatureHighlights
+} from '@/components/home';
 import { CatalogView } from '@/components/CatalogView';
 import { WishlistView } from '@/components/WishlistView';
 import { ProductDetailModal } from '@/components/ProductDetailModal';
@@ -215,16 +220,13 @@ export default function App() {
         {currentView === 'home' && (
           <div className="animate-fadeIn">
             {/* Hero Carousel */}
-            <HeroCarousel onNavigate={handleNavigate} />
+            <HeroBanner onNavigate={handleNavigate} />
 
-            {/* Brand Perks Strip */}
-            <BrandPerks />
+            {/* Dedicated Categories Section (Inline Display directly below Hero) */}
+            <CategoryList onNavigate={handleNavigate} />
 
-            {/* 1. Featured Drops Carousel */}
-            <ProductCarousel
-              tag="DROP 04 · CURATED RELEASES"
-              title="Trending & Newly Formulated"
-              subtitle="Sculptural French Terry garments, Italian footwear, and pure lossless acoustic audio."
+            {/* 1. Featured Drops / Trending Carousel */}
+            <TrendingSection
               products={trendingProducts}
               currency={currency}
               wishlistIds={wishlistIds}
@@ -238,10 +240,7 @@ export default function App() {
             <CategoryHighlights onNavigate={handleNavigate} />
 
             {/* 2. Audio & Carry Precision Carousel */}
-            <ProductCarousel
-              tag="TECHWEAR & WORKSPACE"
-              title="Everyday Carry & Acoustics"
-              subtitle="Waterproof ballistic Cordura bags, aerospace titanium wallets, and CNC keyboards."
+            <AudioAndCarrySection
               products={audioAndCarryProducts}
               currency={currency}
               wishlistIds={wishlistIds}
@@ -252,10 +251,7 @@ export default function App() {
             />
 
             {/* 3. Studio Best Sellers Carousel */}
-            <ProductCarousel
-              tag="HIGHEST RATED"
-              title="Hall of Fame Editions"
-              subtitle="Pieces verified and acclaimed by our design community with 4.9+ star ratings."
+            <BestSellersSection
               products={bestSellerProducts}
               currency={currency}
               wishlistIds={wishlistIds}
@@ -294,6 +290,9 @@ export default function App() {
           </div>
         )}
       </main>
+
+      {/* Feature Highlights & Value Proposition Bar */}
+      <FeatureHighlights />
 
       {/* Footer */}
       <Footer onNavigate={handleNavigate} />

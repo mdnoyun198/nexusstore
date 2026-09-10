@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { X, Heart, Star, ShieldCheck, RefreshCw, Truck, ChevronRight, Check, ChevronLeft, Share2 } from 'lucide-react';
+import { X, Heart, Star, RefreshCw, Truck, ChevronRight, Check, ChevronLeft, Share2 } from 'lucide-react';
 import { Product, ProductColor } from '../types';
 
 interface ProductDetailModalProps {
@@ -21,34 +21,28 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onToggleWishlist,
   onAddToCart
 }) => {
-  if (!product) return null;
-
   const [activeImageIdx, setActiveImageIdx] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<ProductColor>(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(
-    product.sizes ? product.sizes[0] : undefined
-  );
+  const [selectedColorState, setSelectedColorState] = useState<ProductColor | null>(null);
+  const [selectedSizeState, setSelectedSizeState] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [openSection, setOpenSection] = useState<'details' | 'materials' | 'shipping' | null>('details');
   const [copiedLink, setCopiedLink] = useState(false);
 
-  // Reset state when product changes
-  useEffect(() => {
-    setActiveImageIdx(0);
-    setSelectedColor(product.colors[0]);
-    setSelectedSize(product.sizes ? product.sizes[0] : undefined);
-    setQuantity(1);
-    setAddedSuccess(false);
-  }, [product]);
-
   // Lock body scroll when modal is open
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, []);
+    if (product) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = 'unset';
+      };
+    }
+  }, [product]);
+
+  if (!product) return null;
+
+  const currentColor = selectedColorState || product.colors[0];
+  const currentSize = selectedSizeState !== null ? selectedSizeState : (product.sizes ? product.sizes[0] : undefined);
 
   const formatPrice = (amount: number) => {
     const symbol = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
@@ -57,7 +51,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   };
 
   const handleAdd = () => {
-    onAddToCart(product, selectedColor, selectedSize, quantity);
+    onAddToCart(product, currentColor, currentSize, quantity);
     setAddedSuccess(true);
     setTimeout(() => setAddedSuccess(false), 2000);
   };
@@ -212,16 +206,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             <div>
               <div className="flex items-center justify-between text-xs mb-2">
                 <span className="font-medium text-neutral-700">
-                  Color: <span className="text-black font-semibold">{selectedColor.name}</span>
+                  Color: <span className="text-black font-semibold">{currentColor.name}</span>
                 </span>
               </div>
               <div className="flex items-center gap-2.5">
                 {product.colors.map((c) => (
                   <button
                     key={c.name}
-                    onClick={() => setSelectedColor(c)}
+                    onClick={() => setSelectedColorState(c)}
                     className={`group relative flex items-center justify-center p-1 rounded-full border transition-all ${
-                      selectedColor.name === c.name
+                      currentColor.name === c.name
                         ? 'border-black ring-1 ring-black scale-105'
                         : 'border-transparent hover:scale-105'
                     }`}
@@ -240,7 +234,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               <div>
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="font-medium text-neutral-700">
-                    Select Size: <span className="text-black font-semibold">{selectedSize}</span>
+                    Select Size: <span className="text-black font-semibold">{currentSize}</span>
                   </span>
                   <span className="text-neutral-400 font-mono text-[11px] underline cursor-pointer hover:text-black">
                     Size Guide
@@ -250,9 +244,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   {product.sizes.map((sz) => (
                     <button
                       key={sz}
-                      onClick={() => setSelectedSize(sz)}
+                      onClick={() => setSelectedSizeState(sz)}
                       className={`min-w-[48px] py-2 px-3 text-xs font-mono font-medium rounded-xl border transition-all ${
-                        selectedSize === sz
+                        currentSize === sz
                           ? 'border-black bg-black text-white'
                           : 'border-neutral-300 bg-white text-neutral-800 hover:border-black'
                       }`}

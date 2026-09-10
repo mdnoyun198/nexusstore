@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useMemo } from 'react';
-import { SlidersHorizontal, ArrowUpDown, Check, X } from 'lucide-react';
+import { SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import { Product, ProductColor, SortOption } from '../types';
 import { CATEGORIES } from '../data/products';
 import { ProductCard } from './ProductCard';
@@ -25,17 +25,17 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
   onSelectProduct
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
+  const [prevInitialCategory, setPrevInitialCategory] = useState<string>(initialCategory);
   const [sortBy, setSortBy] = useState<SortOption>('featured');
   const [inStockOnly, setInStockOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState<number>(400);
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
-  // Sync category if prop changes
-  React.useEffect(() => {
-    if (initialCategory) {
-      setSelectedCategory(initialCategory);
-    }
-  }, [initialCategory]);
+  // Sync category if prop changes (React recommended pattern)
+  if (initialCategory !== prevInitialCategory) {
+    setPrevInitialCategory(initialCategory);
+    setSelectedCategory(initialCategory);
+  }
 
   const filteredProducts = useMemo(() => {
     return products

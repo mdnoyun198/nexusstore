@@ -33,8 +33,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [appliedPromo, setAppliedPromo] = useState<{ code: string; percent: number } | null>(null);
   const [promoError, setPromoError] = useState('');
   const [showPromoInput, setShowPromoInput] = useState(false);
-  const [orderNote, setOrderNote] = useState('');
-  const [showNoteInput, setShowNoteInput] = useState(false);
 
   if (!isOpen) return null;
 
